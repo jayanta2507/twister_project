@@ -34,9 +34,9 @@
     @include('./layouts.navbar')
     <!-- Navbar -->
 
-  <!-- Main Sidebar Container -->
-  @include('./layouts.sidebar')
-  <!-- Main Sidebar Container -->
+    <!-- Main Sidebar Container -->
+    @include('./layouts.sidebar')
+    <!-- Main Sidebar Container -->
   
 
   <!-- Content Wrapper. Contains page content -->

@@ -2,7 +2,7 @@
 
 use App\http\controllers\ProjectController;
 use App\http\controllers\PostController;
-
+use App\http\controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,17 +20,23 @@ Route::get('/', function () {
     return redirect('/login');
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return view('layouts/mainPage');
-})->name('dashboard');
+/*Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
+    return view('admin/dashboard');
+})->name('dashboard');*/
+
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+
+	Route::get('/dashboard','DashboardController@index')->name('dashboard');
+
+	Route::get('/Project', 'ProjectController@index')->name('Project');
+});
 
 
 
-Route::get('/Project',[ProjectController::class,'index']);
 
-Route::post('/save-data',[ProjectController::class,'store']);
+//Route::post('/save-data',[ProjectController::class,'store']);
 
 
-Route::get('/Post',[PostController::class,'index']);
+//Route::get('/Post',[PostController::class,'index']);
 
-Route::post('/post-data',[PostController::class,'store']);
+//Route::post('/post-data',[PostController::class,'store']);
