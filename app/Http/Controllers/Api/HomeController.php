@@ -14,4 +14,7 @@ class HomeController extends Controller
     public function loginView(){
     	return view('api/login');
     }
+     public function registerView(){
+    	return view('api/registration');
+    }
 }

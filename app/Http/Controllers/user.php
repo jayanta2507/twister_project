@@ -10,7 +10,6 @@ class user extends Controller
     	$name = 'Jenniffer';
     	$users = array(
     		'name'=>'Jyoti Vankala',
-
     		'class'=>'four',
     		'email'=>'jyoti@gmail.com',
 

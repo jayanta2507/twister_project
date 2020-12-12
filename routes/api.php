@@ -33,3 +33,4 @@ use App\http\controllers\Api\HomeController;
 
 
 Route::get('/login','Api\HomeController@loginView')->name('login');
+Route::get('/register','Api\HomeController@registerView')->name('registration');
