@@ -8,11 +8,11 @@ use DB;
 class SiteUsersService
 {
 
-	protected $siteusers;
+	protected $siteusersAssignVar;
 
-	public function __construct(SiteUsers $siteusers)
+	public function __construct(SiteUsers $siteusersObj)
 	{
-		$this->siteusers = $siteusers;
+		$this->siteusersAssignVar = $siteusersObj;
 
 	}
 
@@ -26,11 +26,11 @@ class SiteUsersService
 	public function saveUsers($request)
 	{
 
-		$this->siteusers->name     = $request->input('fullname');
-		$this->siteusers->email    = $request->input('email');
-		$this->siteusers->password = $request->input('password');
-		$this->siteusers->phone    = $request->input('phone');
-		$userIsSaved = $this->siteusers->save();
+		$this->siteusersAssignVar->name     = $request->input('fullname');
+		$this->siteusersAssignVar->email    = $request->input('email');
+		$this->siteusersAssignVar->password = $request->input('password');
+		$this->siteusersAssignVar->phone    = $request->input('phone');
+		$userIsSaved = $this->siteusersAssignVar->save();
 
 		return $userIsSaved;
 	}

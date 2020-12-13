@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use Mail;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Validator;
 use App\Services\SiteUsersService;
+use App\Mail\VerifyMail;
 
 class HomeController extends Controller
 {
@@ -62,6 +64,13 @@ class HomeController extends Controller
 
             	$saveUsers = $this->siteUsersServ->saveUsers($request);
 
+            	$username  = $request->input('fullname');
+            	$useremail = $request->input('email');
+            	$activation_url = "http://localhost:8000/api/register";
+            	$site_url = "http://localhost:8000/home";
+
+            	Mail::to($useremail)->send(new VerifyMail($username,$activation_url,$site_url));
+            	
             	$responsedata = [
                              'status'     => true, 
                              'message'    => "User data saved",
