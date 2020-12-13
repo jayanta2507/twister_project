@@ -29,6 +29,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 	Route::get('/dashboard','DashboardController@index')->name('dashboard');
 
 	Route::get('/Project', 'ProjectController@index')->name('Project');
+	//Route::post('/Project', 'ProjectController@store')->name('Project');
+	Route::post('/saveData','ProjectController@saveData')->name('saveData');
 });
 
 
