@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProjectsTable extends Migration
+class CreateProjectTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,10 +14,9 @@ class CreateProjectsTable extends Migration
     public function up()
     {
         Schema::create('projects', function (Blueprint $table) {
-             $table->id();
-            $table->integer('site_user_id')->nullable();
-            $table->string('title');
-            $table->string('status');
+            $table->id();
+            $table->string('name');
+            $table->string('descr');
             $table->timestamps();
         });
     }
@@ -30,6 +29,5 @@ class CreateProjectsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('projects');
-
     }
 }

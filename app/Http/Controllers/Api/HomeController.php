@@ -4,9 +4,20 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Validator;
+use App\Services\SiteUsersService;
 
 class HomeController extends Controller
 {
+
+	protected $siteUsersServ;
+
+    public function __construct(SiteUsersService $siteUsersServ)
+    {
+        $this->siteUsersServ   = $siteUsersServ;
+    }
+
+
     public function index(){
     	return view('api/home');
     }
@@ -17,4 +28,58 @@ class HomeController extends Controller
      public function registerView(){
     	return view('api/registration');
     }
+
+    public function userRegister(Request $request){
+    	 
+    	try {
+
+    		/* data validation */
+            $validator = Validator::make($request->all(), [
+                        'fullname' => 'required', 
+                        'email'    => 'required|email|unique:site_users',                        
+                        'password' => 'required|min:8|max:30',
+                        'phone'    => 'required|min:8|max:14',              
+                        
+            ]);
+
+
+            if ($validator->fails()) :
+              
+                 /* data validation response ready */
+                $validatorMsg = $validator->errors()->toArray(); /* get error msg */
+               
+                foreach ($validatorMsg as $key => $error) {
+                    $message = $error[0];
+                    break;
+                }
+
+                $responsedata   = [
+                                  'status' => false, 
+                                  'message'    => $message,
+                 		          'data'   => new \stdClass()
+                                ];
+            else :
+
+            	$saveUsers = $this->siteUsersServ->saveUsers($request);
+
+            	$responsedata = [
+                             'status'     => true, 
+                             'message'    => "User data saved",
+                 		     'data'       => new \stdClass()
+                            ];
+
+
+            endif;
+		} catch (Exception $e) {
+          	/* build response  */
+        	$responsedata = [
+                             'status'     => false, 
+                             'message'    => $e->getMessage(),
+                 		     'data'       => new \stdClass()
+                            ];
+        }	
+
+        return response()->json($responsedata);
+    }
+    //$_POST['']
 }

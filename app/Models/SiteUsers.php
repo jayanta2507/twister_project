@@ -5,15 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Project extends Model
+class SiteUsers extends Model
 {
     use HasFactory;
 
-     protected $fillable = [
-       'name',
-       'descr'
-
+    protected $fillable = [
+        'name',
+        'email',
+        'phone',
+        'profile_photo_path'
     ];
 }
 
-
+?>
