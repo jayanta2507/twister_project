@@ -7,16 +7,19 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Validator;
 use App\Services\SiteUsersService;
+use App\Services\VerifyUsersService;
 use App\Mail\VerifyMail;
 
 class HomeController extends Controller
 {
 
-	protected $siteUsersServ;
+	  protected $siteUsersServ;
+    protected $verifyUsersServ;
 
-    public function __construct(SiteUsersService $siteUsersServ)
+    public function __construct(SiteUsersService $siteUsersServObj, VerifyUsersService $verifyUsersServObj)
     {
-        $this->siteUsersServ   = $siteUsersServ;
+        $this->siteUsersServ   = $siteUsersServObj;
+        $this->verifyUsersServ = $verifyUsersServObj;
     }
 
 
@@ -58,24 +61,29 @@ class HomeController extends Controller
                 $responsedata   = [
                                   'status' => false, 
                                   'message'    => $message,
-                 		          'data'   => new \stdClass()
+                 		              'data'   => new \stdClass()
                                 ];
             else :
 
-            	$saveUsers = $this->siteUsersServ->saveUsers($request);
+            	$lastId = $this->siteUsersServ->saveUsers($request);
+
+              $verify_token = $this->verifyUsersServ->saveVerifyUser($lastId);
 
             	$username  = $request->input('fullname');
             	$useremail = $request->input('email');
-            	$activation_url = "http://localhost:8000/api/register";
+            	$activation_url = "http://localhost:8000/api/verifyUserToken/".$verify_token;
             	$site_url = "http://localhost:8000/home";
 
             	Mail::to($useremail)->send(new VerifyMail($username,$activation_url,$site_url));
             	
-            	$responsedata = [
+              return redirect('api/userLogin');
+              //return \Redirect::route('userLogin');
+
+            	/*$responsedata = [
                              'status'     => true, 
                              'message'    => "User data saved",
-                 		     'data'       => new \stdClass()
-                            ];
+                 		         'data'       => $saveUsers
+                            ];*/
 
 
             endif;
@@ -84,11 +92,33 @@ class HomeController extends Controller
         	$responsedata = [
                              'status'     => false, 
                              'message'    => $e->getMessage(),
-                 		     'data'       => new \stdClass()
+                 		         'data'       => new \stdClass()
                             ];
         }	
 
         return response()->json($responsedata);
+    }
+
+    public function checkVerifyUser($token, Request $request){
+       try {
+
+        $verifyUserData = $this->verifyUsersServ->checkVerifyUser($token);
+
+        if (!empty($verifyUserData)) {
+          $updateUser = $this->siteUsersServ->updateUser($verifyUserData->user_id);
+          return redirect('api/userLogin');
+        }else{
+          return redirect('api/register');
+        }
+
+      } catch (Exception $e) {
+            /* build response  */
+          $responsedata = [
+                             'status'     => false, 
+                             'message'    => $e->getMessage(),
+                             'data'       => new \stdClass()
+                            ];
+        } 
     }
     //$_POST['']
 }

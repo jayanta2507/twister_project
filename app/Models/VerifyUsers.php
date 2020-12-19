@@ -5,16 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SiteUsers extends Model
+class VerifyUsers extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'email',
-        'phone',
-        'profile_photo_path',
-        'email_verified_status'
+        'user_id',
+        'token'
     ];
 }
 

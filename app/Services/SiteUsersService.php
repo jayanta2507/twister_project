@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\SiteUsers;
 use DB;
+use Illuminate\Support\Facades\Hash;
 
 class SiteUsersService
 {
@@ -28,11 +29,19 @@ class SiteUsersService
 
 		$this->siteusersAssignVar->name     = $request->input('fullname');
 		$this->siteusersAssignVar->email    = $request->input('email');
-		$this->siteusersAssignVar->password = $request->input('password');
+		$this->siteusersAssignVar->password = Hash::make($request->input('password'));
 		$this->siteusersAssignVar->phone    = $request->input('phone');
-		$userIsSaved = $this->siteusersAssignVar->save();
+		$this->siteusersAssignVar->save();
 
-		return $userIsSaved;
+		return $this->siteusersAssignVar->id;
+	}
+
+	public function updateUser($user_id){
+		
+		$getUser =  $this->siteusersAssignVar->where('id',$user_id)->first();
+
+		$getUser->email_verified_status = '1';
+		$getUser->update();
 	}
 
 	/**
