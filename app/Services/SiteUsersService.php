@@ -43,6 +43,18 @@ class SiteUsersService
 		$getUser->email_verified_status = '1';
 		$getUser->update();
 	}
+	public function LoginSaveUsers($request)
+	{
+
+		
+		$this->siteusersAssignVar->email    = $request->input('email');
+		$this->siteusersAssignVar->password = Hash::make($request->input('password'));
+		
+		$this->siteusersAssignVar->save();
+
+		return $this->siteusersAssignVar->id;
+		echo $siteusersAssignVar;
+	}
 
 	/**
      * Store a newly created resource in storage.

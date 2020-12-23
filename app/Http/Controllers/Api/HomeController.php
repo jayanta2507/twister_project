@@ -22,7 +22,6 @@ class HomeController extends Controller
         $this->verifyUsersServ = $verifyUsersServObj;
     }
 
-
     public function index(){
     	return view('api/home');
     }
@@ -32,6 +31,58 @@ class HomeController extends Controller
     }
      public function registerView(){
     	return view('api/registration');
+    }
+
+    public function loginViewPro(Request $request){
+     
+     try {
+
+        /* data validation */
+            $validator = Validator::make($request->all(), [
+                        
+                        'email'    => 'required|email|unique:site_users',                        
+                        'password' => 'required|min:8|max:30',
+                        
+            ]);
+
+
+            if ($validator->fails()) :
+              
+                 /* data validation response ready */
+                $validatorMsg = $validator->errors()->toArray(); /* get error msg */
+               
+                foreach ($validatorMsg as $key => $error) {
+                    $message = $error[0];
+                    break;
+                }
+
+                $responsedata   = [
+                                  'status' => false, 
+                                  'message'    => $message,
+                                  'data'   => new \stdClass()
+                                ];
+            else :
+
+              $lastId = $this->siteUsersServ->LoginSaveUsers($request);
+
+              
+           echo $siteusersAssignVar;
+
+              
+              
+
+    
+    endif;
+    } catch (Exception $e) {
+            /* build response  */
+          $responsedata = [
+                             'status'     => false, 
+                             'message'    => $e->getMessage(),
+                             'data'       => new \stdClass()
+                            ];
+        } 
+
+        return response()->json($responsedata);
     }
 
     public function userRegister(Request $request){
