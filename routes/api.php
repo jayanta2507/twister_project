@@ -37,7 +37,7 @@ Route::get('/register','Api\HomeController@registerView')->name('registration');
 Route::post('/userRegister','Api\HomeController@userRegister')->name('userRegister');
 Route::get('/verifyUserToken/{token}','Api\HomeController@checkVerifyUser')->name('verifyUserToken');
 Route::get('/login','Api\HomeController@View')->name('registration');
-Route::post('/Login','Api\HomeController@loginViewPro')->name('Login');
+Route::post('/submitUserLogin','Api\HomeController@submitUserLogin')->name('submitUserLogin');
 
 
 

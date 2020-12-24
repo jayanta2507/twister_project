@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\SiteUsers;
+use App\Models\UserLoginDetails;
 use DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -10,11 +11,12 @@ class SiteUsersService
 {
 
 	protected $siteusersAssignVar;
+	protected $userLoginDetailsAssignVer;
 
-	public function __construct(SiteUsers $siteusersObj)
+	public function __construct(SiteUsers $siteusersObj, UserLoginDetails $userLoginDetailsObj)
 	{
-		$this->siteusersAssignVar = $siteusersObj;
-
+		$this->siteusersAssignVar        = $siteusersObj;
+		$this->userLoginDetailsAssignVer = $userLoginDetailsObj;
 	}
 
 	/**
@@ -43,17 +45,79 @@ class SiteUsersService
 		$getUser->email_verified_status = '1';
 		$getUser->update();
 	}
-	public function LoginSaveUsers($request)
-	{
 
-		
-		$this->siteusersAssignVar->email    = $request->input('email');
+
+	public function loginUsers($request)
+	{
+		$email    = $request->input('email');
+		$pass     = $request->input('password');
+
+		$check_user_count 	= $this->siteusersAssignVar->where('email',$email)->count();
+	    $user               = $this->siteusersAssignVar->where('email',$email)->first();
+	    $user_pass          = $user->password;
+
+		if($check_user_count > 0){
+	      	if(Hash::check($pass,$user_pass)) //check if password matched
+			{
+				// check if status is 1
+				if($user->email_verified_status == 0){
+					$responsedata = array(
+									'status'	=> 0,
+									'message'	=> "Your Signup request Pending",
+									'data' 		=> array(),
+								);
+
+					
+				} 
+				else{
+					$user_id_with_time 	= $user->id.':'.date("Y-m-d H:i:s");
+					$token 				= Hash::make($user_id_with_time);
+					$token 				= str_replace("/","", $token);
+					$expiry_time   		= strtotime("+60 minutes");
+
+
+					$this->userLoginDetailsAssignVer->user_id     = $user->id;
+					$this->userLoginDetailsAssignVer->token       = $token;
+					$this->userLoginDetailsAssignVer->login_time  = date("Y-m-d H:i:s");
+					$this->userLoginDetailsAssignVer->expiry_time = date("Y-m-d H:i:s",$expiry_time);
+					$this->userLoginDetailsAssignVer->save();
+
+						$user = $user->toArray();
+
+					$responsedata = array(
+							'status'	=> 1,
+							'data' 		=> $user,
+							'message'	=> "Login successfully"
+						);
+				}
+			}
+			else  //if password not matched
+			{
+				$responsedata = array(
+									'status'	=> 0,
+									'data' 		=> array(),
+									'message'	=> "Invalid credential"
+								);
+			}
+		}
+		else{
+			$responsedata = array(
+									'status'	=> 0,
+									'data' 		=> array(),
+									'message'	=> "Invalid User"
+								);
+		}
+
+
+
+		return response()->json($responsedata);
+		/*$this->siteusersAssignVar->email    = $request->input('email');
 		$this->siteusersAssignVar->password = Hash::make($request->input('password'));
 		
 		$this->siteusersAssignVar->save();
 
 		return $this->siteusersAssignVar->id;
-		echo $siteusersAssignVar;
+		echo $siteusersAssignVar;*/
 	}
 
 	/**

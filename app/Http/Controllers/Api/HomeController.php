@@ -33,14 +33,14 @@ class HomeController extends Controller
     	return view('api/registration');
     }
 
-    public function loginViewPro(Request $request){
+    public function submitUserLogin(Request $request){
      
      try {
 
         /* data validation */
             $validator = Validator::make($request->all(), [
                         
-                        'email'    => 'required|email|unique:site_users',                        
+                        'email'    => 'required|email',                        
                         'password' => 'required|min:8|max:30',
                         
             ]);
@@ -63,16 +63,9 @@ class HomeController extends Controller
                                 ];
             else :
 
-              $lastId = $this->siteUsersServ->LoginSaveUsers($request);
+              $responsedata = $this->siteUsersServ->loginUsers($request);            
+            endif;
 
-              
-           echo $siteusersAssignVar;
-
-              
-              
-
-    
-    endif;
     } catch (Exception $e) {
             /* build response  */
           $responsedata = [
