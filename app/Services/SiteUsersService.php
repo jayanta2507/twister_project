@@ -128,7 +128,6 @@ class SiteUsersService
 public function forgetPasswordUsers($request)
 	{
 		$email    = $request->input('email');
-		
 
 		$check_user_count 	= $this->siteusersAssignVar->where('email',$email)->count();
 	    $user               = $this->siteusersAssignVar->where('email',$email)->first();
@@ -140,31 +139,20 @@ public function forgetPasswordUsers($request)
 				if($user->email_verified_status == 0){
 					$responsedata = array(
 									'status'	=> 0,
-									'message'	=> "Your Signup request Pending",
+									'message'	=> "Your email does not exsist",
 									'data' 		=> array(),
 								);
 
 					
 				} 
 				else{
-					$user_id_with_time 	= $user->id.':'.date("Y-m-d H:i:s");
-					$token 				= Hash::make($user_id_with_time);
-					$token 				= str_replace("/","", $token);
-					$expiry_time   		= strtotime("+60 minutes");
-
-
-					$this->userLoginDetailsAssignVer->user_id     = $user->id;
-					$this->userLoginDetailsAssignVer->token       = $token;
-					$this->userLoginDetailsAssignVer->login_time  = date("Y-m-d H:i:s");
-					$this->userLoginDetailsAssignVer->expiry_time = date("Y-m-d H:i:s",$expiry_time);
-					$this->userLoginDetailsAssignVer->save();
-
-						$user = $user->toArray();
+					
+					$user = $user->toArray();
 
 					$responsedata = array(
 							'status'	=> 1,
+							'message'	=> "User data get successfully",
 							'data' 		=> $user,
-							'message'	=> "Login successfully"
 						);
 				
 				}
@@ -179,7 +167,7 @@ public function forgetPasswordUsers($request)
 								);
 			}
 			
-			return response()->json($responsedata);
+			return $responsedata;
 		}
 		
 

@@ -9,6 +9,7 @@ use Validator;
 use App\Services\SiteUsersService;
 use App\Services\VerifyUsersService;
 use App\Mail\VerifyMail;
+use App\Mail\ResetPasswordMail;
 
 class HomeController extends Controller
 {
@@ -42,59 +43,7 @@ class HomeController extends Controller
     }
   
 
-     public function forgetPasswordUser(Request $request){
-     
-     try {
-
-        /* data validation */
-            $validator = Validator::make($request->all(), [
-                        
-                        'email'    => 'required|email',                        
-                        
-            ]);
-
-
-            if ($validator->fails()) :
-              
-                 /* data validation response ready */
-                $validatorMsg = $validator->errors()->toArray(); /* get error msg */
-               
-                foreach ($validatorMsg as $key => $error) {
-                    $message = $error[0];
-                    break;
-                }
-
-                $responsedata   = [
-                                  'status' => false, 
-                                  'message'    => $message,
-                                  'data'   => new \stdClass()
-                                ];
-            else :
-
-
-              $responsedata = $this->siteUsersServ->forgetPasswordUsers($request);
-
-
-            return redirect('api/new_password');
-
-
-
-
-            endif;
-
-
-    } catch (Exception $e) {
-            /* build response  */
-          $responsedata = [
-                             'status'     => false, 
-                             'message'    => $e->getMessage(),
-                             'data'       => new \stdClass()
-                            ];
-        } 
-
-        return response()->json($responsedata);
-
-    }
+    
 
 
     public function submitUserLogin(Request $request){
@@ -181,7 +130,7 @@ class HomeController extends Controller
             	$username  = $request->input('fullname');
             	$useremail = $request->input('email');
             	$activation_url = "http://localhost:8000/api/verifyUserToken/".$verify_token;
-            	$site_url = "http://localhost:8000/home";
+            	$site_url       = "http://localhost:8000/home";
 
             	Mail::to($useremail)->send(new VerifyMail($username,$activation_url,$site_url));
             	
@@ -229,6 +178,75 @@ class HomeController extends Controller
                             ];
         } 
     }
-    //$_POST['']
+    
+
+
+    public function forgetPasswordUser(Request $request){
+     
+      try {
+
+        /* data validation */
+            $validator = Validator::make($request->all(), [
+                        'email'    => 'required|email',                        
+            ]);
+
+
+            if ($validator->fails()) :
+              
+                 /* data validation response ready */
+                $validatorMsg = $validator->errors()->toArray(); /* get error msg */
+               
+                foreach ($validatorMsg as $key => $error) {
+                    $message = $error[0];
+                    break;
+                }
+
+                $responsedata   = [
+                                  'status' => false, 
+                                  'message'    => $message,
+                                  'data'   => array(),
+                                ];
+            else :
+
+
+            $responsedata = $this->siteUsersServ->forgetPasswordUsers($request);
+
+
+            /*echo "<pre>";
+            print_r($responsedata);
+            die();*/
+
+
+            $username  = $responsedata['data']['name'];
+            $useremail = $responsedata['data']['email'];
+
+            $activation_url = "http://localhost:8000/api/new_password";
+            $site_url       = "http://localhost:8000/home";
+
+            $i = 0;
+            $otpPin = ""; 
+            while($i < 4){
+                $otpPin .= mt_rand(0, 9);
+                $i++;
+            }
+
+            Mail::to($useremail)->send(new ResetPasswordMail($username,$activation_url,$site_url, $otpPin));
+
+            return redirect('api/new_password');
+            endif;
+
+
+        } catch (Exception $e) {
+            /* build response  */
+          $responsedata = [
+                             'status'     => false, 
+                             'message'    => $e->getMessage(),
+                             'data'       => new \stdClass()
+                            ];
+        } 
+
+        return response()->json($responsedata);
+
+    }
 }
  

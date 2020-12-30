@@ -35,14 +35,17 @@ use App\http\controllers\Api\HomeController;
 Route::get('/userLogin','Api\HomeController@loginView')->name('userLogin');
 
 
-Route::get('/new_password','Api\HomeController@newPassword')->name('new_password');
-Route::post('/forgetPasswordUser','Api\HomeController@forgetPasswordUser')->name('forgetPasswordUser');
-Route::get('/forget-password','Api\HomeController@forgetPassword')->name('forgetPassword');
+
 Route::get('/register','Api\HomeController@registerView')->name('registration');
 Route::post('/userRegister','Api\HomeController@userRegister')->name('userRegister');
 Route::get('/verifyUserToken/{token}','Api\HomeController@checkVerifyUser')->name('verifyUserToken');
 //Route::get('/login','Api\HomeController@View')->name('registration');
 Route::post('/submitUserLogin','Api\HomeController@submitUserLogin')->name('submitUserLogin');
 
+Route::get('/forget-password','Api\HomeController@forgetPassword')->name('forgetPassword');
+
+Route::post('/forgetPasswordUser','Api\HomeController@forgetPasswordUser')->name('forgetPasswordUser');
+
+Route::get('/new_password','Api\HomeController@newPassword')->name('new_password');
 
 
