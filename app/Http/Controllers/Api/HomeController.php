@@ -219,7 +219,7 @@ class HomeController extends Controller
 
             $username  = $responsedata['data']['name'];
             $useremail = $responsedata['data']['email'];
-
+            $user_id   = $responsedata['data']['id'];
             $activation_url = "http://localhost:8000/api/new_password";
             $site_url       = "http://localhost:8000/home";
 
@@ -230,8 +230,11 @@ class HomeController extends Controller
                 $i++;
             }
 
-            Mail::to($useremail)->send(new ResetPasswordMail($username,$activation_url,$site_url, $otpPin));
+           $responsedata = $this->siteUsersServ->updateOtp($user_id , $otpPin);
 
+
+            Mail::to($useremail)->send(new ResetPasswordMail($username,$activation_url,$site_url, $otpPin));
+       
             return redirect('api/new_password');
             endif;
 
