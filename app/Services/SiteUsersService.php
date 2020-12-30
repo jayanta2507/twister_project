@@ -46,6 +46,15 @@ class SiteUsersService
 		$getUser->update();
 	}
 
+		public function updateOtp($user_id){
+		
+		$getUser =  $this->siteusersAssignVar->where('id',$user_id)->first();
+
+		$getUser->email_verified_status = '1';
+		$getUser->update();
+	}
+
+
 
 	public function loginUsers($request)
 	{
