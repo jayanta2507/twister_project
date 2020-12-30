@@ -54,9 +54,10 @@ class SiteUsersService
 
 		$check_user_count 	= $this->siteusersAssignVar->where('email',$email)->count();
 	    $user               = $this->siteusersAssignVar->where('email',$email)->first();
-	    $user_pass          = $user->password;
+	   
 
 		if($check_user_count > 0){
+			 $user_pass          = $user->password;
 	      	if(Hash::check($pass,$user_pass)) //check if password matched
 			{
 				// check if status is 1
@@ -124,7 +125,74 @@ class SiteUsersService
      * Store a newly created resource in storage.
      *
      */
+public function forgetPasswordUsers($request)
+	{
+		$email    = $request->input('email');
+		
 
+		$check_user_count 	= $this->siteusersAssignVar->where('email',$email)->count();
+	    $user               = $this->siteusersAssignVar->where('email',$email)->first();
+	   
+
+		if($check_user_count > 0){
+			 
+				// check if status is 1
+				if($user->email_verified_status == 0){
+					$responsedata = array(
+									'status'	=> 0,
+									'message'	=> "Your Signup request Pending",
+									'data' 		=> array(),
+								);
+
+					
+				} 
+				else{
+					$user_id_with_time 	= $user->id.':'.date("Y-m-d H:i:s");
+					$token 				= Hash::make($user_id_with_time);
+					$token 				= str_replace("/","", $token);
+					$expiry_time   		= strtotime("+60 minutes");
+
+
+					$this->userLoginDetailsAssignVer->user_id     = $user->id;
+					$this->userLoginDetailsAssignVer->token       = $token;
+					$this->userLoginDetailsAssignVer->login_time  = date("Y-m-d H:i:s");
+					$this->userLoginDetailsAssignVer->expiry_time = date("Y-m-d H:i:s",$expiry_time);
+					$this->userLoginDetailsAssignVer->save();
+
+						$user = $user->toArray();
+
+					$responsedata = array(
+							'status'	=> 1,
+							'data' 		=> $user,
+							'message'	=> "Login successfully"
+						);
+				
+				}
+
+			}
+			else  //if password not matched
+			{
+				$responsedata = array(
+									'status'	=> 0,
+									'data' 		=> array(),
+									'message'	=> "Invalid credential"
+								);
+			}
+			
+			return response()->json($responsedata);
+		}
+		
+
+
+
+		/*$this->siteusersAssignVar->email    = $request->input('email');
+		$this->siteusersAssignVar->password = Hash::make($request->input('password'));
+		
+		$this->siteusersAssignVar->save();
+
+		return $this->siteusersAssignVar->id;
+		echo $siteusersAssignVar;*/
+	
 	public function create($attributes)
 	{	
  		//

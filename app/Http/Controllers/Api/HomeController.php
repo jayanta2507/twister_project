@@ -32,6 +32,70 @@ class HomeController extends Controller
      public function registerView(){
     	return view('api/registration');
     }
+    public function forgetPassword(){
+      return view('api/forget-password');
+    }
+     public function newPassword(){
+      return view('api/new_password');
+
+
+    }
+  
+
+     public function forgetPasswordUser(Request $request){
+     
+     try {
+
+        /* data validation */
+            $validator = Validator::make($request->all(), [
+                        
+                        'email'    => 'required|email',                        
+                        
+            ]);
+
+
+            if ($validator->fails()) :
+              
+                 /* data validation response ready */
+                $validatorMsg = $validator->errors()->toArray(); /* get error msg */
+               
+                foreach ($validatorMsg as $key => $error) {
+                    $message = $error[0];
+                    break;
+                }
+
+                $responsedata   = [
+                                  'status' => false, 
+                                  'message'    => $message,
+                                  'data'   => new \stdClass()
+                                ];
+            else :
+
+
+              $responsedata = $this->siteUsersServ->forgetPasswordUsers($request);
+
+
+            return redirect('api/new_password');
+
+
+
+
+            endif;
+
+
+    } catch (Exception $e) {
+            /* build response  */
+          $responsedata = [
+                             'status'     => false, 
+                             'message'    => $e->getMessage(),
+                             'data'       => new \stdClass()
+                            ];
+        } 
+
+        return response()->json($responsedata);
+
+    }
+
 
     public function submitUserLogin(Request $request){
      
@@ -93,6 +157,7 @@ class HomeController extends Controller
 
 
             if ($validator->fails()) :
+              
               
                  /* data validation response ready */
                 $validatorMsg = $validator->errors()->toArray(); /* get error msg */
@@ -166,3 +231,4 @@ class HomeController extends Controller
     }
     //$_POST['']
 }
+ 

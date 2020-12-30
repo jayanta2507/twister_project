@@ -61,7 +61,7 @@ class VerifyUsersService
 
 	public function edit($id)
 	{
-       //
+      ///
 	}
 
 	public function update($attributes, $id)
