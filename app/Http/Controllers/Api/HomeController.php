@@ -251,5 +251,61 @@ class HomeController extends Controller
         return response()->json($responsedata);
 
     }
+     public function updatePassword(Request $request){
+       
+      try {
+
+        /* data validation */
+            $validator = Validator::make($request->all(), [
+                        'otp' => 'required',                        
+                        'new_password' => 'required|min:8|max:30',
+                        'confirm_password' => 'required|min:8|max:30',
+                              
+                        
+            ]);
+
+
+            if ($validator->fails()) :
+              
+              
+                 /* data validation response ready */
+                $validatorMsg = $validator->errors()->toArray(); /* get error msg */
+               
+                foreach ($validatorMsg as $key => $error) {
+                    $message = $error[0];
+                    break;
+                }
+
+                $responsedata   = [
+                                  'status' => false, 
+                                  'message'    => $message,
+                                  'data'   => new \stdClass()
+                                ];
+            else :
+
+              $lastId = $this->siteUsersServ->updatePassword($request);
+             
+              return redirect('api/userLogin');
+              //return \Redirect::route('userLogin');
+
+              /*$responsedata = [
+                             'status'     => true, 
+                             'message'    => "User data saved",
+                             'data'       => $saveUsers
+                            ];*/
+
+
+            endif;
+    } catch (Exception $e) {
+            /* build response  */
+          $responsedata = [
+                             'status'     => false, 
+                             'message'    => $e->getMessage(),
+                             'data'       => new \stdClass()
+                            ];
+        } 
+
+        return response()->json($responsedata);
+    }
+
 }
- 

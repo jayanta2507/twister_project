@@ -20,11 +20,19 @@
   <div class="card card-outline card-primary">
     
     <div class="card-body">
-      <p class="login-box-msg">Sign in to start your session</p>
+      <p class="login-box-msg">Create-Password</p>
 
-      <form action="{{route('forgetPasswordUser')}}"  method="post">
+      <form action="{{route('updatePassword')}}"  method="post">
+         <div class="input-group mb-3">
+          <input type="otp" class="form-control" placeholder="OTP" name="otp">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-envelope"></span>
+            </div>
+          </div>
+        </div>
         <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="NewPassword" name="password">
+          <input type="password" class="form-control" placeholder="New Password" name="new_password">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
@@ -32,7 +40,7 @@
           </div>
         </div>
          <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Confirm Password" name="password">
+          <input type="password" class="form-control" placeholder="Confirm Password" name="confirm_password">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
@@ -51,7 +59,7 @@
           </div>
           <!-- /.col -->
           <div class="col-4">
-            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+            <button type="submit" class="btn btn-primary btn-block">submit</button>
           </div>
           <!-- /.col -->
         </div>
@@ -69,7 +77,7 @@
 
      
       <p class="mb-0">
-        <a href="" class="text-center">Register a new membership?</a>
+        <a href="" class="text-center">Confirm The Password!</a>
       </p>
     </div>
     <!-- /.card-body -->

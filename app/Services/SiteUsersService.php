@@ -37,6 +37,34 @@ class SiteUsersService
 
 		return $this->siteusersAssignVar->id;
 	}
+	public function updatePassword($request)
+	{
+        $otp              = $request->input('otp');
+		$new_pass         = $request->input('new_password');
+		$confirm_pass     = $request->input('confirm_password');
+
+		if($new_pass==$confirm_pass){
+
+			$check_user_otp	= $this->siteusersAssignVar->where('otp',$otp)->first();
+
+		    $check_user_otp->password  = Hash::make($request->input('new_password'));
+            $check_user_otp->update();
+
+	      
+			}else  //if password not matched
+			{
+				$responsedata = array(
+									'status'	=> 0,
+									'data' 		=> array(),
+									'message'	=> "Invalid "
+								);
+			}
+	
+
+		return $this->siteusersAssignVar->id;
+	}
+
+
 
 	public function updateUser($user_id){
 		
@@ -155,9 +183,9 @@ public function forgetPasswordUsers($request)
 					$user = $user->toArray();
 
 					$responsedata = array(
-							'status'	=> 1,
-							'message'	=> "User data get successfully",
-							'data' 		=> $user,
+							        'status'	=> 1,
+							        'message'	=> "User data get successfully",
+							        'data' 		=> $user,
 						);
 				
 				}

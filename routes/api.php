@@ -48,4 +48,6 @@ Route::post('/forgetPasswordUser','Api\HomeController@forgetPasswordUser')->name
 
 Route::get('/new_password','Api\HomeController@newPassword')->name('new_password');
 
+Route::post('/updatePassword','Api\HomeController@updatePassword')->name('updatePassword');
+
 
