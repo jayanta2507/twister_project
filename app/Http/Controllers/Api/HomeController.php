@@ -229,6 +229,79 @@ class HomeController extends Controller
                             ];
         } 
     }
-    //$_POST['']
+ 
+    
+
+
+    public function forgetPasswordUser(Request $request){
+     
+      try {
+
+        /* data validation */
+            $validator = Validator::make($request->all(), [
+                        'email'    => 'required|email',                        
+            ]);
+
+
+            if ($validator->fails()) :
+              
+                 /* data validation response ready */
+                $validatorMsg = $validator->errors()->toArray(); /* get error msg */
+               
+                foreach ($validatorMsg as $key => $error) {
+                    $message = $error[0];
+                    break;
+                }
+
+                $responsedata   = [
+                                  'status' => false, 
+                                  'message'    => $message,
+                                  'data'   => array(),
+                                ];
+            else :
+
+
+            $responsedata = $this->siteUsersServ->forgetPasswordUsers($request);
+
+
+            /*echo "<pre>";
+            print_r($responsedata);
+            die();*/
+
+
+            $username  = $responsedata['data']['name'];
+            $useremail = $responsedata['data']['email'];
+            $user_id   = $responsedata['data']['id'];
+            $activation_url = "http://localhost:8000/api/new_password";
+            $site_url       = "http://localhost:8000/home";
+
+            $i = 0;
+            $otpPin = ""; 
+            while($i < 4){
+                $otpPin .= mt_rand(0, 9);
+                $i++;
+            }
+
+           $responsedata = $this->siteUsersServ->updateOtp($user_id , $otpPin);
+
+
+            Mail::to($useremail)->send(new ResetPasswordMail($username,$activation_url,$site_url, $otpPin));
+       
+            return redirect('api/new_password');
+            endif;
+
+
+        } catch (Exception $e) {
+            /* build response  */
+          $responsedata = [
+                             'status'     => false, 
+                             'message'    => $e->getMessage(),
+                             'data'       => new \stdClass()
+                            ];
+        } 
+
+        return response()->json($responsedata);
+
+    }
 }
  
