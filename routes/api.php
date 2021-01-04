@@ -45,4 +45,6 @@ Route::get('/verifyUserToken/{token}','Api\HomeController@checkVerifyUser')->nam
 Route::post('/submitUserLogin','Api\HomeController@submitUserLogin')->name('submitUserLogin');
 
 
+Route::post('/updatePassword','Api\HomeController@updatePassword')->name('updatePassword');
+
 
