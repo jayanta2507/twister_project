@@ -43,11 +43,9 @@ class HomeController extends Controller
     }
   
 
-    
-
-
-    public function submitUserLogin(Request $request){
      
+    public function submitUserLogin(Request $request){
+      
      try {
 
         /* data validation */
@@ -192,6 +190,7 @@ class HomeController extends Controller
                             ];
         } 
     }
+ 
     
 
 
@@ -323,3 +322,6 @@ class HomeController extends Controller
     }
 
 }
+
+
+        
