@@ -33,6 +33,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 	Route::post('/saveData','ProjectController@saveData')->name('saveData');
 
 	Route::get('/Site_user_table','DashboardController@Site_users')->name('Site_user_table');
+
+	Route::post('/ChangeUserStatus','DashboardController@ChangeUserStatus')->name('ChangeUserStatus');
 });
 
 

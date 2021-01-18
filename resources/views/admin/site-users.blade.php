@@ -50,12 +50,10 @@
                   <td>{{$user->email}}</td>
                   <td>{{$user->phone}}</td>
                   <td>
-                    <!-- <select id="alert">
-                      <option  ><?php echo ($user->email_verified_status==1)?" selected='selected'":""?>Active</option>
-                      <option  ><?php echo ($user->email_verified_status==0)?" selected='selected'":""?>Inactive</option>
-                      
-                    </select> -->
-         <input data-id="{{$user->id}}" class="toggle-class" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" onchange="statusChange('')" data-off="InActive" {{ $user->email_verified_status ? 'checked' : '' }}>
+
+                   <!-- <input type="button" name="" onclick="statusChange(1)" onc> -->
+                    
+                    <input data-id="{{$user->id}}" id="id_{{$user->id}}" class="toggle-class" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" onchange="statusChange('{{$user->id}}')" {{ $user->email_verified_status ? 'checked' : '' }}>
                   </td>
                   <td>{{$user->created_at}}</td>
                   <td>{{$user->updated_at}}</td>
@@ -75,8 +73,42 @@
 </section>
 
 <script>
+
+  /*$(function() {
+    alert("status");
+    $('.toggle-class').change(function() {
+      alert("status");
+        var status = $(this).prop('checked') == true ? 1 : 0; 
+        var user_id = $(this).data('id'); 
+         console.log(status);
+         alert(status);
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: '/ChangeUserStatus',
+            data: {'status': status, 'user_id': user_id},
+            success: function(data){
+              console.log(data.success)
+            }
+        });
+    })
+  })*/
+
   function statusChange(id){
-    alert("tst");
+    var status = $("#id_"+id).prop('checked') == true ? 1 : 0; 
+    var user_id = $(this).data('id'); 
+    alert(status);
+    var _token = "<?php echo csrf_token(); ?>";
+    $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "{{ url('ChangeUserStatus') }}",
+            data: {_token:_token, 'status': status, 'user_id': id},
+            success: function(data){
+              console.log(data.success)
+            }
+        });  
+
   }
 </script>
 

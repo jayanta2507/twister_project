@@ -47,7 +47,7 @@ Route::post('/submitUserLogin','Api\HomeController@submitUserLogin')->name('subm
 
 Route::post('/updatePassword','Api\HomeController@updatePassword')->name('updatePassword');
 
-Route::get('/ChangeUserStatus','Api\HomeController@ChangeUserStatus')->name('ChangeUserStatus');
+
 
 
 
