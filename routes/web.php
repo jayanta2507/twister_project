@@ -27,12 +27,12 @@ Route::get('/', function () {
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
 	Route::get('/dashboard','DashboardController@index')->name('dashboard');
-
+	Route::get('/usersList','DashboardController@usersList')->name('usersList');
+    Route::get('/emailVerification','DashboardController@emailVerification')->name('emailVerification');
 	Route::get('/Project', 'ProjectController@index')->name('Project');
 	//Route::post('/Project', 'ProjectController@store')->name('Project');
 	Route::post('/saveData','ProjectController@saveData')->name('saveData');
 });
-
 
 
 

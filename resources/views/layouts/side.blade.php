@@ -1,3 +1,4 @@
+
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     
@@ -38,12 +39,13 @@
                 Dashboard
                </p>
             </a>
-            <a href="{{route('usersList')}}" class="nav-link active">
+          <a href="{{route('usersList')}}" class="nav-link active">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
-                Users list
+                User List
                </p>
             </a>
+          
            <!--  <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="./index.html" class="nav-link active">
