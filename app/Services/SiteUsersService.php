@@ -46,6 +46,7 @@ class SiteUsersService
 		if($new_pass==$confirm_pass){
 
 			$check_user_otp	= $this->siteusersAssignVar->where('otp',$otp)->first();
+           		
 
 		    $check_user_otp->password  = Hash::make($request->input('new_password'));
             $check_user_otp->update();

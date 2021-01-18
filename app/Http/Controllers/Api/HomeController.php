@@ -9,6 +9,7 @@ use Validator;
 use App\Services\SiteUsersService;
 use App\Services\VerifyUsersService;
 use App\Mail\VerifyMail;
+use App\Mail\ResetPasswordMail;
 
 class HomeController extends Controller
 {
@@ -42,63 +43,9 @@ class HomeController extends Controller
     }
   
 
-     public function forgetPasswordUser(Request $request){
      
-     try {
-
-        /* data validation */
-            $validator = Validator::make($request->all(), [
-                        
-                        'email'    => 'required|email',                        
-                        
-            ]);
-
-
-            if ($validator->fails()) :
-              
-                 /* data validation response ready */
-                $validatorMsg = $validator->errors()->toArray(); /* get error msg */
-               
-                foreach ($validatorMsg as $key => $error) {
-                    $message = $error[0];
-                    break;
-                }
-
-                $responsedata   = [
-                                  'status' => false, 
-                                  'message'    => $message,
-                                  'data'   => new \stdClass()
-                                ];
-            else :
-
-
-              $responsedata = $this->siteUsersServ->forgetPasswordUsers($request);
-
-
-            return redirect('api/new_password');
-
-
-
-
-            endif;
-
-
-    } catch (Exception $e) {
-            /* build response  */
-          $responsedata = [
-                             'status'     => false, 
-                             'message'    => $e->getMessage(),
-                             'data'       => new \stdClass()
-                            ];
-        } 
-
-        return response()->json($responsedata);
-
-    }
-
-
     public function submitUserLogin(Request $request){
-     
+      
      try {
 
         /* data validation */
@@ -361,3 +308,16 @@ class HomeController extends Controller
     }
 
 }
+
+
+        
+    public function ChangeUserStatus(){
+
+        \Log::info($request->all());
+        $user = SiteUsers::find($request->user_id);
+        $user->status = $request->status;
+        $user->save();
+  
+        return response()->json(['success'=>'Status change successfully.']);
+
+    }

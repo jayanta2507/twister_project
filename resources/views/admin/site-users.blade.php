@@ -3,82 +3,98 @@
 <section class="content">
 <div class="container-fluid">
 <!-- Small boxes (Stat box) -->
+
+
+
+     
+<section class="content">
+<div class="container-fluid">
 <div class="row">
-  <div class="col-lg-3 col-6">
-    <!-- small box -->
-    <div class="small-box bg-info">
-      <div class="inner">
-        <h3>150</h3>
+  <script
+  src="https://code.jquery.com/jquery-3.5.1.js"
+  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+  crossorigin="anonymous"></script>
 
-        <p>New Orders</p>
-      </div>
-      <div class="icon">
-        <i class="ion ion-bag"></i>
-      </div>
-      <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-    </div>
-  </div>
-  <!-- ./col -->
-  <div class="col-lg-3 col-6">
-    <!-- small box -->
-    <div class="small-box bg-success">
-      <div class="inner">
-        <h3>53<sup style="font-size: 20px">%</sup></h3>
 
-        <p>Bounce Rate</p>
-      </div>
-      <div class="icon">
-        <i class="ion ion-stats-bars"></i>
-      </div>
-      <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-    </div>
-  </div>
-  <!-- ./col -->
-  <div class="col-lg-3 col-6">
-    <!-- small box -->
-    <div class="small-box bg-warning">
-      <div class="inner">
-        <h3>44</h3>
+  <!-- testing script -->
 
-        <p>User Registrations</p>
-      </div>
-      <div class="icon">
-        <i class="ion ion-person-add"></i>
-      </div>
-      <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-    </div>
-  </div>
-  <!-- ./col -->
-  <div class="col-lg-3 col-6">
-    <!-- small box -->
-    <div class="small-box bg-danger">
-      <div class="inner">
-        <h3>65</h3>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" ></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"  />
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
-        <p>Unique Visitors</p>
-      </div>
-      <div class="icon">
-        <i class="ion ion-pie-graph"></i>
-      </div>
-      <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-    </div>
-  </div>
-  <div class="col-lg-3 col-6">
-    <!-- small box -->
-    <div class="small-box bg-danger">
-      <div class="inner">
-        <h3>65</h3>
 
-        <p>Site Users</p>
-      </div>
-      <div class="icon">
-        <i class="ion ion-pie-graph"></i>
-      </div>
-      <a href="{{route('Site_user_table')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-    </div>
-  </div>
-  <!-- ./col -->
+<div class="col-xs-12">
+  <center>
+    <div class="card-body table-responsive p-0" style="height: 300px;">
+ <table class="table table-head-fixed" border="1">
+        <thead>
+     
+              <tr>
+                 <th>Id</th>
+                 <th>Name</th>
+                 <th>Email</th>
+                 <th>Phone</th>
+                 <th>Status</th>
+                 <th>Created At</th>
+                 <th>Updated At</th>
+                
+              </tr>
+       </thead>  
+            
+        <tbody>
+                @foreach($siteUserArr as $key => $user)
+              <tr>
+                  <td>{{$key+1}}</td>
+                  <td>{{$user->name}}</td>
+                  <td>{{$user->email}}</td>
+                  <td>{{$user->phone}}</td>
+                  <td>
+                    <!-- <select id="alert">
+                      <option  ><?php echo ($user->email_verified_status==1)?" selected='selected'":""?>Active</option>
+                      <option  ><?php echo ($user->email_verified_status==0)?" selected='selected'":""?>Inactive</option>
+                      
+                    </select> -->
+                     <input data-id="{{$user->id}}" class="toggle-class" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $user->email_verified_status ? 'checked' : '' }}>
+                  </td>
+                  <td>{{$user->created_at}}</td>
+                  <td>{{$user->updated_at}}</td>
+                 
+
+              </tr>
+                 @endforeach
+       </tbody>
+            
+   </table>
+ </div>
+   </center>
+   </div>
 </div>
+
+</div><!-- /.container-fluid -->
+</section>
+
+<script>
+  $(function() {
+    $('.toggle-class').change(function() {
+        var status = $(this).prop('checked') == true ? 1 : 0; 
+        var user_id = $(this).data('id'); 
+         console.log(status);
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: '/ChangeUserStatus',
+            data: {'status': status, 'user_id': user_id},
+            success: function(data){
+              console.log(data.success)
+            }
+        });
+    })
+  })
+</script>
+
+
+
 <!-- /.row -->
 <!-- Main row -->
 <!-- <div class="row">

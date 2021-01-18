@@ -31,7 +31,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 	Route::get('/Project', 'ProjectController@index')->name('Project');
 	//Route::post('/Project', 'ProjectController@store')->name('Project');
 	Route::post('/saveData','ProjectController@saveData')->name('saveData');
+
+	Route::get('/Site_user_table','DashboardController@Site_users')->name('Site_user_table');
 });
+
 
 
 
