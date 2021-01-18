@@ -55,7 +55,7 @@
                       <option  ><?php echo ($user->email_verified_status==0)?" selected='selected'":""?>Inactive</option>
                       
                     </select> -->
-                     <input data-id="{{$user->id}}" class="toggle-class" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $user->email_verified_status ? 'checked' : '' }}>
+         <input data-id="{{$user->id}}" class="toggle-class" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" onchange="statusChange('')" data-off="InActive" {{ $user->email_verified_status ? 'checked' : '' }}>
                   </td>
                   <td>{{$user->created_at}}</td>
                   <td>{{$user->updated_at}}</td>
@@ -75,22 +75,9 @@
 </section>
 
 <script>
-  $(function() {
-    $('.toggle-class').change(function() {
-        var status = $(this).prop('checked') == true ? 1 : 0; 
-        var user_id = $(this).data('id'); 
-         console.log(status);
-        $.ajax({
-            type: "GET",
-            dataType: "json",
-            url: '/ChangeUserStatus',
-            data: {'status': status, 'user_id': user_id},
-            success: function(data){
-              console.log(data.success)
-            }
-        });
-    })
-  })
+  function statusChange(id){
+    alert("tst");
+  }
 </script>
 
 
