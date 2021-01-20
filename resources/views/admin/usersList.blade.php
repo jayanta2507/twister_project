@@ -78,26 +78,6 @@
 
 <script>
 
-  /*$(function() {
-    alert("status");
-    $('.toggle-class').change(function() {
-      alert("status");
-        var status = $(this).prop('checked') == true ? 1 : 0; 
-        var user_id = $(this).data('id'); 
-         console.log(status);
-         alert(status);
-        $.ajax({
-            type: "GET",
-            dataType: "json",
-            url: '/ChangeUserStatus',
-            data: {'status': status, 'user_id': user_id},
-            success: function(data){
-              console.log(data.success)
-            }
-        });
-    })
-  })*/
-
   function statusChange(id){
     var status = $("#id_"+id).prop('checked') == true ? 1 : 0; 
     var user_id = $(this).data('id'); 
@@ -113,6 +93,26 @@
             }
         });  
 
+  }
+  function deleteRow(id){
+
+  var status = $("#id_"+id).prop('checked') == true ? 1 : 0; 
+    var user_id = $(this).data('id'); 
+    var _token = "<?php echo csrf_token(); ?>";
+    //alert(_token);
+    if (confirm("Are You Sure You Want To Delete")) {
+         $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "{{ url('deleteUser/{id}') }}",
+            data: {_token:_token, 'status': status, 'user_id': id},
+            success: function(data){
+              console.log(data.success)
+            }
+        });  
+
+
+    }
   }
   
 </script>
