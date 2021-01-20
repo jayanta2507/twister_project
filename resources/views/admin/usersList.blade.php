@@ -36,7 +36,7 @@
                  <th>Email</th>
                  <th>Phone</th>
                  <th>Status</th>
-                 <th>Action</th>
+                 <th>Edit</th>
                  <th>Delete</th>
                  <th>Created At</th>
                  <th>Updated At</th>
@@ -56,9 +56,9 @@
                    <!-- <input type="button" name="" onclick="statusChange(1)" onc> -->
                     
                     <input data-id="{{$user->id}}" id="id_{{$user->id}}" class="toggle-class" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" onchange="statusChange('{{$user->id}}')" {{ $user->email_verified_status ? 'checked' : '' }}>
-                  </td>
                    <td><a href="{{route('user',$user->id)}}"><button class="btn btn-primary btn-block">Edit</button></a></td>
-                   <td><a href="{{route('deleteUser',$user->id)}}" onclick="deleteRow('{{$user->id}}')"class="btn btn-danger btn-block">Edit</a> </td>
+                   <td><a href="{{route('deleteUser',$user->id)}}" onclick="deleteRow('{{$user->id}}')" class="btn btn-danger btn-block">Delete</a> </td>
+                  </td>
                   <td>{{$user->created_at}}</td>
                   <td>{{$user->updated_at}}</td>
                  
@@ -114,31 +114,8 @@
         });  
 
   }
-  function deleteRow(id){
-     //var status = $("#id_"+id).prop('checked') == true ? 1 : 0; 
-    var user_id = ; 
-    alert(user_id);
-    var _token = "<?php echo csrf_token(); ?>";
-   if (confirm("do you  really want  to delete the row?")) {
-
-     $.ajax({
-        url: '{{ url('deleteUser') }}",',
-        type: 'DELETE',
-        data: {_token:_token, 'user_id': id},
-          success: function(data){
-              console.log(data.success)
-            }
-
-
-
-
-     });
-
-   }
-
-  }
+  
 </script>
-
 
 
 <!-- /.row -->

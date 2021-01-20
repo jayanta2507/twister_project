@@ -44,14 +44,11 @@ class DashboardController extends Controller
       return view('admin/updatePage',['data'=>$data]);
 
    }   
-   public function deleteUser(Request $request){
-      
-        $data = $request->all();
-        print_r($data);
-        die();
-      
+   public function deleteUser($id){
        
-        $responsedata = $this->siteUsersServ->deleteUser($data,$request);
+        $data = SiteUsers::find($id);
+        $user_id = $data['id'];
+        $responsedata = $this->siteUsersServ->deleteUser($user_id);
        //return Session::flash('success', 'The post was just trashed.');
 
   
@@ -65,7 +62,7 @@ class DashboardController extends Controller
     public function ChangeUserStatus(Request $request){
 
         $data = $request->all();
-        
+
        /* \Log::info($request->all());
         $user = SiteUsers::find($request->user_id);
         $user->status = $request->status;

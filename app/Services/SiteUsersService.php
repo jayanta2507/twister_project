@@ -52,8 +52,8 @@ class SiteUsersService
 		$getUser->update();
 
 	}
-	public function deleteUser($data,$request){
-		$getUser =  $this->siteusersAssignVar->where('id',$data)->first();
+	public function deleteUser($user_id){
+		$getUser =  $this->siteusersAssignVar->where('id',$user_id)->first();
 		$getUser->delete();
 
 	}

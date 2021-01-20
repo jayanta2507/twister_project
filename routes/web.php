@@ -37,7 +37,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
 	Route::post('/ChangeUserStatus','DashboardController@ChangeUserStatus')->name('ChangeUserStatus');
 
-	Route::get('/deleteUser','DashboardController@deleteUser')->name('deleteUser');
+	Route::get('/deleteUser/{id}','DashboardController@deleteUser')->name('deleteUser');
 	Route::get('/user/{id}','DashboardController@user')->name('user');
 	Route::post('/updateRegister','DashboardController@updateRegister')->name('updateRegister');
 });
