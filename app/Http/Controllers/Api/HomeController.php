@@ -43,11 +43,9 @@ class HomeController extends Controller
     }
   
 
-    
-
-
-    public function submitUserLogin(Request $request){
      
+    public function submitUserLogin(Request $request){
+      
      try {
 
         /* data validation */
@@ -90,6 +88,7 @@ class HomeController extends Controller
 
         return response()->json($responsedata);
     }
+    
 
     public function userRegister(Request $request){
     	 
@@ -125,16 +124,30 @@ class HomeController extends Controller
 
             	$lastId = $this->siteUsersServ->saveUsers($request);
 
-              $verify_token = $this->verifyUsersServ->saveVerifyUser($lastId);
 
-            	$username  = $request->input('fullname');
-            	$useremail = $request->input('email');
-            	$activation_url = "http://localhost:8000/api/verifyUserToken/".$verify_token;
-            	$site_url       = "http://localhost:8000/home";
+              if ($lastId>0) {
+                $verify_token = $this->verifyUsersServ->saveVerifyUser($lastId);
 
-            	Mail::to($useremail)->send(new VerifyMail($username,$activation_url,$site_url));
-            	
-              return redirect('api/userLogin');
+                $username  = $request->input('fullname');
+                $useremail = $request->input('email');
+                $activation_url = "http://localhost:8000/api/verifyUserToken/".$verify_token;
+                $site_url       = "http://localhost:8000/home";
+
+                Mail::to($useremail)->send(new VerifyMail($username,$activation_url,$site_url));
+                
+                return redirect('api/userLogin');
+              }else{
+                $responsedata = array(
+                  'status'  => 0,
+                  'data'    => array(),
+                  'message' => "Phone number is already exsist"
+                );
+
+                return response()->json($responsedata);
+
+              }
+
+              
               //return \Redirect::route('userLogin');
 
             	/*$responsedata = [
@@ -178,6 +191,7 @@ class HomeController extends Controller
                             ];
         } 
     }
+ 
     
 
 
@@ -309,3 +323,6 @@ class HomeController extends Controller
     }
 
 }
+
+
+        

@@ -28,14 +28,34 @@ class SiteUsersService
 
 	public function saveUsers($request)
 	{
+		$check_user_phone	= $this->siteusersAssignVar->where('phone',$request->input('phone'))->count();
 
-		$this->siteusersAssignVar->name     = $request->input('fullname');
-		$this->siteusersAssignVar->email    = $request->input('email');
-		$this->siteusersAssignVar->password = Hash::make($request->input('password'));
-		$this->siteusersAssignVar->phone    = $request->input('phone');
-		$this->siteusersAssignVar->save();
+		if ($check_user_phone==0) {
+			$this->siteusersAssignVar->name     = $request->input('fullname');
+			$this->siteusersAssignVar->email    = $request->input('email');
+			$this->siteusersAssignVar->password = Hash::make($request->input('password'));
+			$this->siteusersAssignVar->phone    = $request->input('phone');
+			$this->siteusersAssignVar->save();
 
-		return $this->siteusersAssignVar->id;
+			return $this->siteusersAssignVar->id;
+		}else{
+			return 0;
+		}
+		
+	}
+	public function userStatus($data){
+		$user_id = $data['user_id'];
+		$status  = $data['status']; 
+		$getUser =  $this->siteusersAssignVar->where('id',$user_id)->first();
+
+		$getUser->email_verified_status = $status;
+		$getUser->update();
+
+	}
+	public function deleteUser($data,$request){
+		$getUser =  $this->siteusersAssignVar->where('id',$data)->first();
+		$getUser->delete();
+
 	}
 	public function updatePassword($request)
 	{
@@ -46,6 +66,7 @@ class SiteUsersService
 		if($new_pass==$confirm_pass){
 
 			$check_user_otp	= $this->siteusersAssignVar->where('otp',$otp)->first();
+           		
 
 		    $check_user_otp->password  = Hash::make($request->input('new_password'));
             $check_user_otp->update();
@@ -63,6 +84,16 @@ class SiteUsersService
 
 		return $this->siteusersAssignVar->id;
 	}
+	public function updateRegister($request,$data)
+    {
+    	$user_id        =  $data['id'];
+        $getUser        =  $this->siteusersAssignVar->where('id',$user_id)->first();
+        $getUser->name  = $data['name'];
+        $getUser->email = $data['email'];
+        $getUser->phone = $data['phone'];
+    	 $getUser->update();
+     }
+
 
 
 
@@ -74,12 +105,15 @@ class SiteUsersService
 
 		$getUser->update();
 	}
+ 
 	public function updateOtp($user_id, $otpPin)
     {
     	$getUser =  $this->siteusersAssignVar->where('id', $user_id)->first();
     	$getUser->otp = $otpPin;
     	$getUser->update();
      }
+
+
 	public function loginUsers($request)
 	{
 		$email    = $request->input('email');
@@ -97,7 +131,7 @@ class SiteUsersService
 				if($user->email_verified_status == 0){
 					$responsedata = array(
 									'status'	=> 0,
-									'message'	=> "Your Signup request Pending",
+									'message'	=> "Your Signup request is pending",
 									'data' 		=> array(),
 								);
 
