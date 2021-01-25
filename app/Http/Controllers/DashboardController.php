@@ -44,16 +44,13 @@ class DashboardController extends Controller
      return  redirect('usersList');
 
    }   
-   public function deleteUser($id){
-       
-        $data = SiteUsers::find($id);
+   public function deleteUser(Request $request){
+        $data = $request->all();
+     
         $user_id = $data['id'];
         $responsedata = $this->siteUsersServ->deleteUser($user_id);
-        return  redirect('usersList');
-       //return Session::flash('success', 'The post was just trashed.');
-
-  
-      //  return response()->json(['success'=>'you have successfully deleted','data'=>$data]);
+        
+        return response()->json(['success'=>'you have successfully deleted','data'=>$data]);
         
 
    }
