@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\Request; 
 
 use App\Models\SiteUsers;
 use DB;
@@ -47,8 +47,9 @@ class DashboardController extends Controller
    public function deleteUser(Request $request){
         $data = $request->all();
      
-        $user_id = $data['id'];
+        $user_id = $data['user_id'];
         $responsedata = $this->siteUsersServ->deleteUser($user_id);
+          return  redirect('usersList');
         
         return response()->json(['success'=>'you have successfully deleted','data'=>$data]);
         

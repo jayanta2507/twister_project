@@ -57,7 +57,7 @@
                     
                     <input data-id="{{$user->id}}" id="id_{{$user->id}}" class="toggle-class" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" onchange="statusChange('{{$user->id}}')" {{ $user->email_verified_status ? 'checked' : '' }}>
                    <td><a href="{{route('user',$user->id)}}"><button class="btn btn-primary btn-block">Edit</button></a></td>
-                   <td><a onclick="deleteRow('{{$user->id}}')" class="btn btn-danger btn-block">Delete</a> </td>
+                   <td><a href="javascript:void(0)" onclick="deleteRow('{{$user->id}}')" class="btn btn-danger btn-block">Delete</a> </td>
                   </td>
                   <td>{{$user->created_at}}</td>
                   <td>{{$user->updated_at}}</td>
@@ -107,6 +107,7 @@
             data: {_token:_token, 'status': status, 'user_id': id},
             success: function(response){
               console.log(response.success)
+              
             }
         });  
     }else{
